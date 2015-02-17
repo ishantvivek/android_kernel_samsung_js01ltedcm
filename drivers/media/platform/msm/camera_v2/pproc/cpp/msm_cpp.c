@@ -1589,11 +1589,6 @@ long msm_cpp_subdev_ioctl(struct v4l2_subdev *sd,
 		return -EINVAL;
 	}
 
-	if ((ioctl_ptr->ioctl_ptr == NULL) || (ioctl_ptr->len == 0)) {
-		pr_err("Wrong ioctl_ptr %p\n", ioctl_ptr);
-		return -EINVAL;
-	}
-
 	mutex_lock(&cpp_dev->mutex);
 	CPP_DBG("E cmd: %d\n", cmd);
 	switch (cmd) {
@@ -1629,8 +1624,6 @@ long msm_cpp_subdev_ioctl(struct v4l2_subdev *sd,
 
 			if (ioctl_ptr->ioctl_ptr == NULL) {
 				pr_err("ioctl_ptr->ioctl_ptr is NULL\n");
-				kfree(cpp_dev->fw_name_bin);
-				cpp_dev->fw_name_bin = NULL;
 				mutex_unlock(&cpp_dev->mutex);
 				return -EINVAL;
 			}
@@ -1891,9 +1884,6 @@ long msm_cpp_subdev_ioctl(struct v4l2_subdev *sd,
 		if (copy_to_user((void __user *)ioctl_ptr->ioctl_ptr,
 				process_frame,
 				sizeof(struct msm_cpp_frame_info_t))) {
-					kfree(process_frame->cpp_cmd_msg);
-					kfree(process_frame);
-					kfree(event_qcmd);
 					mutex_unlock(&cpp_dev->mutex);
 					return -EINVAL;
 		}
