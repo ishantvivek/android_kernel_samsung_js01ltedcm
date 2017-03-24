@@ -1996,8 +1996,9 @@ int sec_debug_subsys_init(void)
 	strlcpy(secdbg_krait->state, "Init", sizeof(secdbg_krait->state) + 1);
 	secdbg_krait->nr_cpus = CONFIG_NR_CPUS;
 
+#ifdef CONFIG_ANDROID_LOGGER
 	sec_debug_subsys_set_logger_info(&secdbg_krait->logger_log);
-
+#endif
 	secdbg_krait->tz_core_dump =
 		(struct tzbsp_dump_buf_s **)get_wdog_regsave_paddr();
 #if 0 //MSM8974 doesn't use the msm_fb.c. and JBP doesn't use fb on kernel side.
